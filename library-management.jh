@@ -1,0 +1,108 @@
+entity Account {
+	username String required,
+    password String,
+    expiryDate Date
+}
+
+entity Book {
+	bookId Integer required,
+    title String,
+    author String,
+    price Double,
+    available Boolean
+}
+
+entity BorrowedBy {
+	borrowedId Integer required,
+    book Book,
+    member Member,
+	dueDate Date,
+    returnDate Date,
+    issue String
+}
+
+entity Member {
+	membId Integer required,
+    firstName String,
+	lastName String,
+	email String,
+	phoneNumber String,
+    membDate Date,
+    membType String,
+    account Account,
+    location Location
+}
+
+entity Publisher {
+	pubID Integer required,
+    firstName String,
+	lastName String,
+	email String,
+    location Location
+}
+
+entity PublisherBy {
+	publisher Publisher required,
+    book Book required
+}
+
+entity Region {
+	regionName String
+}
+
+entity Country {
+	countryName String
+}
+
+entity Location {
+	streetAddress String,
+	postalCode String,
+	city String,
+	stateProvince String
+}
+
+relationship ManyToMany {
+	PublisherBy{publisher(pubID)} to Publisher{pubID},
+    PublisherBy{book(bookId)} to Book{bookId}
+}
+
+relationship ManyToMany {
+	BorrowedBy{book(bookId)} to Book{pubID},
+    BorrowedBy{member(membId)} to Member{membId}
+}
+
+relationship OneToOne {
+	Member{address} to Location,
+    Publisher{address} to Location
+}
+
+relationship OneToOne {
+	Account{username} to Member{account(username)}
+}
+
+relationship OneToOne {
+	Country{region} to Region
+}
+
+relationship OneToOne {
+	Location{country} to Country
+}
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+dto all with mapstruct
+
+// Set service options to all
+service all with serviceImpl
+
+// Set pagination options
+//paginate JobHistory, Employee with infinite-scroll
+//paginate Job with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+//service all with serviceImpl except Employee, Job
+
+
